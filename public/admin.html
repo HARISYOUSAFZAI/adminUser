@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .admin-container { width: 300px; margin: 100px auto; }
+        .admin-container h2 { text-align: center; }
+        .admin-container form { display: flex; flex-direction: column; }
+        .admin-container input { margin: 5px 0; padding: 10px; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h2>Create New User</h2>
+        <form id="createUserForm">
+            <input type="text" id="newUsername" placeholder="New Username" required>
+            <input type="password" id="newPassword" placeholder="New Password" required>
+            <button type="submit">Create User</button>
+        </form>
+        <div id="message"></div>
+    </div>
+    <script>
+        document.getElementById('createUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('newUsername').value;
+            const password = document.getElementById('newPassword').value;
+
+            fetch('/create-user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('message').innerText = 'User created successfully!';
+                } else {
+                    document.getElementById('message').innerText = 'Failed to create user!';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
